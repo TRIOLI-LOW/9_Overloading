@@ -13,8 +13,7 @@ public:
 		denominator_ = denominator;
 	}
 	bool operator==(Fraction& r_fr) {
-		if (numerator_ == r_fr.numerator_){
-			if (denominator_ == r_fr.denominator_)
+		if ((numerator_ * r_fr.denominator_ ) == (r_fr.numerator_ * denominator_)){
 				return true;
 	}
 		else  return false; 
@@ -24,15 +23,13 @@ public:
 		return !(*this == r_fr);
 	}
 	bool operator<= (Fraction& r_fr) {
-		if (numerator_ <= r_fr.numerator_) {
-			if (denominator_ <= r_fr.denominator_)
+		if ((numerator_ * r_fr.denominator_) <= (r_fr.numerator_ * denominator_)) {
 				return true;
 		}
 		else  return false;
 	}
 	bool operator>= (Fraction& r_fr) {
-		if (numerator_ >= r_fr.numerator_) {
-			if (denominator_ >= r_fr.denominator_)
+		if ((numerator_ * r_fr.denominator_) >= (r_fr.numerator_ * denominator_)) {
 				return true;
 		}
 		else  return false;
@@ -41,7 +38,7 @@ public:
 		return !(*this <= r_fr);
 	}
 	bool operator< (Fraction& r_fr) {
-		return !(*this > r_fr);
+		return !(*this >= r_fr);
 	}
 	
 

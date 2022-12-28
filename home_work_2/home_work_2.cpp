@@ -6,26 +6,22 @@ private:
 	int numerator_;
 	int denominator_;
 	char div = '/';
-	
 public:
-	
+	int NOD(int a, int b)
+	{
+		while (a != b)
+			if (a > b) { a = a - b ;}
+			else { b = b - a; }
+		return a;
+	}
+	Fraction() {};
 	Fraction(int numerator, int denominator)
 	{
-		numerator_ = numerator;
-		denominator_ = denominator;
-		while (((numerator_ % 2 == 0) && (denominator_ % 2 == 0)) || ((numerator_ % 3 == 0) && (denominator_ % 3 == 0))) {
-			if ((numerator_ % 2 == 0) && (denominator_ % 2 == 0)) {
-				numerator_ / 2;
-				denominator_ / 2;
-			}
-			else {
-				numerator_ / 3;
-				denominator_ / 3;
-			}
-			// Не срабатывает эта часть кода. Голову уже сломал, куда ее можно переместить.
-		}
-	}
+		numerator_ = numerator / NOD(numerator, denominator);
+		denominator_ = denominator  / NOD(numerator, denominator);
 	
+	}
+
 	Fraction operator+(Fraction& r_fr) {
 		double n1 = (numerator_ * r_fr.denominator_) + (r_fr.numerator_ *denominator_);
 		double d1 = denominator_ * r_fr.denominator_;
@@ -47,29 +43,33 @@ public:
 		return Fraction(n1, d1);
 	}
 	Fraction operator++( ){
-		
-		return Fraction(numerator_ + denominator_, denominator_);
+		numerator_ = numerator_ + denominator_;
+		return Fraction(numerator_, denominator_);
 	}
 	Fraction operator--() {
-
-		return Fraction(numerator_ - denominator_, denominator_);
+		numerator_ = numerator_ - denominator_;
+		return Fraction(numerator_, denominator_);
 	}
-	friend  void operator++(Fraction&, int);
-	friend  void operator--(Fraction&, int);
+	friend  Fraction operator++(Fraction&, int);
+	friend  Fraction operator--(Fraction&, int);
 	friend std::ostream& operator<<(std::ostream& l_op, Fraction& r_op);
 
 };
-void operator++(Fraction& f, int) {
-	
+Fraction operator++(Fraction& f, int) {
+	int t = f.numerator_;
 	f.numerator_ = f.numerator_ + f.denominator_;
-	//return Fraction(f.numerator_, f.denominator_);
+
+	return Fraction(t, f.denominator_);
 }
-void operator--(Fraction& f, int) {
+Fraction  operator--(Fraction& f, int) {
+	int t = f.numerator_;
 	f.numerator_ = f.numerator_ - f.denominator_;
-	//return Fraction(f.numerator_, f.denominator_);
+	
+	return Fraction(t , f.denominator_);
 }
 std::ostream& operator<<(std::ostream& l_op, Fraction& r_op) {
 	std::cout << r_op.numerator_ << r_op.div << r_op.denominator_;
+
 	return l_op;
 };
 
@@ -90,14 +90,17 @@ int main()
 	std::cin >> d;
 	Fraction f1(a, b);
 	Fraction f2(c, d);
-	Fraction f3 = f1 + f2;
-	std::cout << f1 << " + " << f2 << " = " << f3 << std::endl;
-	f3 = ++f1 - f2;
-	std::cout << f1 << " - " << f2 << " = " << f3 << std::endl;
-	f3 = f1 * f2;
-	std::cout << f1 << " * " << f2 << " = " << f3 << std::endl;
-	f3 = --f1 / f2;
-	std::cout << f1 << " / " << f2 << " = " << f3 << std::endl;
+	Fraction f3 ;
+
+	std::cout << f1 << " + " << f2 << " = ";
+	f3 = f1 + f2; std::cout << f3 << std::endl;
+	std::cout << f1 << " - " << f2 << " = ";
+	f3 = ++f1 - f2; std::cout << f3 << std::endl;
+	std::cout << f1 << " * " << f2 << " = ";
+	f3 = f1 * f2;  std::cout << f3 << std::endl;
+	std::cout << f1 << " / " << f2 << " = ";
+	f3 = f1-- / f2;  std::cout << f3 << std::endl;
+	
 	
 	return 0;
 }
